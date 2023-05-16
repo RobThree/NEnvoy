@@ -1,6 +1,6 @@
 # ![Logo](logo.png) NEnvoy
 
-A .Net Enphase Envoy client. Currently a work in progress.
+A .Net Enphase Envoy client. Currently a work in progress. The list of currently implemented (and not yet implemented) items can be found [here](TODO.md).
 
 ## Quickstart
 
