@@ -1,6 +1,8 @@
 # ![Logo](logo.png) NEnvoy
 
-A .Net Enphase Envoy client. Currently a work in progress. The list of currently implemented (and not yet implemented) items can be found [here](TODO.md).
+A .Net Enphase Envoy client available as a [NuGet package](https://www.nuget.org/packages/NEnvoy).
+
+Currently a work in progress. The list of currently implemented (and not yet implemented) items can be found [here](TODO.md).
 
 ## Quickstart
 
@@ -15,7 +17,7 @@ var deviceinfo = await client.GetEnvoyInfoAsync();
 
 ## Connection
 
-You can specify a different hostname or IP address for your envoy:
+You can specify a different hostname or IP address for your Envoy:
 
 ```c#
 var ci = new ConnectionInfo("user@gmail.com", "sup3rs3cet", "envoy.local");
