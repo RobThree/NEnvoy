@@ -4,11 +4,13 @@ using Refit;
 
 namespace NEnvoy.Internals;
 
-internal interface IEnvoy
+internal interface IEnvoyXml
 {
     [Get("/info.xml")]
     Task<EnvoyInfo> GetEnvoyInfoAsync(CancellationToken cancellationToken = default);
+}
 
+internal interface IEnvoyJson {
     [Get("/ivp/meters/reports/consumption")]
     Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken);
 

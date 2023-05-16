@@ -12,13 +12,13 @@ public class EnvoyClient : IEnvoyClient
     public const string DefaultEnphaseBaseUri = "https://enlighten.enphaseenergy.com";
     public const string DefaultEntrezBaseUri = "https://entrez.enphaseenergy.com";
 
-    private readonly IEnvoy _envoyxmlclient;
-    private readonly IEnvoy _envoyjsonclient;
+    private readonly IEnvoyXml _envoyxmlclient;
+    private readonly IEnvoyJson _envoyjsonclient;
     
     public string SessionToken { get; private set; }
     public bool IsConsumer { get; private set; }
 
-    private EnvoyClient(IEnvoy envoyXmlClient, IEnvoy envoyJsonClient, string sessionToken, bool isconsumer)
+    private EnvoyClient(IEnvoyXml envoyXmlClient, IEnvoyJson envoyJsonClient, string sessionToken, bool isconsumer)
     {
         _envoyxmlclient = envoyXmlClient ?? throw new ArgumentNullException(nameof(envoyXmlClient));
         _envoyjsonclient = envoyJsonClient ?? throw new ArgumentNullException(nameof(envoyJsonClient));
@@ -46,15 +46,15 @@ public class EnvoyClient : IEnvoyClient
         throw new LoginFailedException(loginresult.Message);
     }
 
-    private static IEnvoy GetEnvoyClient(string host, string? sessionToken, RefitSettings? refitSettings = null)
-        => RestService.For<IEnvoy>(GetUnsafeClient($"https://{host}", sessionToken), refitSettings);
+    private static IEnvoyJson GetEnvoyClient(string host, string? sessionToken = null)
+        => RestService.For<IEnvoyJson>(GetUnsafeClient($"https://{host}", sessionToken));
 
-    private static IEnvoy GetEnvoyXmlClient(string host, string? sessionToken = null)
-        => GetEnvoyClient(host, sessionToken, new RefitSettings
+    private static IEnvoyXml GetEnvoyXmlClient(string host, string? sessionToken = null)
+        => RestService.For<IEnvoyXml>(GetUnsafeClient($"https://{host}", sessionToken), new RefitSettings
         {
             ContentSerializer = new XmlContentSerializer()
         });
-    private static Task<EnvoyInfo> GetEnvoyInfoAsync(IEnvoy envoyClient, CancellationToken cancellationToken = default)
+    private static Task<EnvoyInfo> GetEnvoyInfoAsync(IEnvoyXml envoyClient, CancellationToken cancellationToken = default)
         => envoyClient.GetEnvoyInfoAsync(cancellationToken);
 
     public Task<EnvoyInfo> GetEnvoyInfoAsync(CancellationToken cancellationToken = default)
