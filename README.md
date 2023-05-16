@@ -33,6 +33,10 @@ var ci = new ConnectionInfo("user@gmail.com", "sup3rs3cet", EnphaseBaseUri: "htt
 var ci = new ConnectionInfo("user@gmail.com", "sup3rs3cet", EnphaseEntrezBaseUri: "https://entrez-new.enphaseenergy.com");
 ```
 
+## Contributing
+
+Yes please! Implement any of the methods and make a PR and we'll take it from there.
+
 ## License
 
 Licensed under MIT license. See [LICENSE](LICENSE) for details.
