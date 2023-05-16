@@ -1,4 +1,4 @@
-# NEnvoy
+# ![Logo](logo.png) NEnvoy
 
 A .Net Enphase Envoy client. Currently a work in progress.
 
