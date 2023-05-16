@@ -59,6 +59,18 @@ public class EnvoyClient : IEnvoyClient
     public Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken = default)
         => _envoyclient.GetConsumptionAsync(cancellationToken);
 
+    public Task<IEnumerable<V1Inverter>> GetV1InvertersAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetV1InvertersAsync(cancellationToken);
+
+    public Task<V1Production> GetV1ProductionAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetV1ProductionAsync(cancellationToken);
+
+    public Task<IEnumerable<Meter>> GetMetersAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetMetersAsync(cancellationToken);
+
+    public Task<IEnumerable<RootMeterReading>> GetMeterReadingssAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetMeterReadingssAsync(cancellationToken);
+
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
     private static HttpClient GetUnsafeClient(string baseAddress, string? sessionToken)
     {

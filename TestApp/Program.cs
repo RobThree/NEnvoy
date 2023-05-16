@@ -22,7 +22,10 @@ internal class Program
             : EnvoyClient.FromSessionToken(config.Envoy.EnvoyHost, config.Session.Token, config.Session.IsConsumer);
 
         //var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
-        var test = await client.GetConsumptionAsync().ConfigureAwait(false);
-        Console.WriteLine(test);
+        //var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
+        //var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
+        //var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
+        //var meters = await client.GetMetersAsync().ConfigureAwait(false);
+        var meterreadings = await client.GetMeterReadingssAsync().ConfigureAwait(false);
     }
 }

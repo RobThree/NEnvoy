@@ -9,8 +9,8 @@ Status | Url | Note
 ✅|https://envoy/auth/check_jwt
 ❌|https://envoy/admin/home?locale=en
 ❌|https://envoy/admin/lib/wireless_display.json?site_info=0
-❌|https://envoy/api/v1/production
-❌|https://envoy/api/v1/production/inverters
+✅|https://envoy/api/v1/production
+❕|https://envoy/api/v1/production/inverters | Throws (401 unauthorized) for some reason
 ❌|https://envoy/event?locale=en
 ❌|https://envoy/event.json
 ❌|https://envoy/home
@@ -20,8 +20,8 @@ Status | Url | Note
 ❌|https://envoy/inventory.json?deleted=1
 ❌|https://envoy/ivp/ensemble/inventory
 ❌|https://envoy/ivp/livedata/status
-❌|https://envoy/ivp/meters
-❌|https://envoy/ivp/meters/readings
+✅|https://envoy/ivp/meters
+✅|https://envoy/ivp/meters/readings
 ❕|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` ar still unclear.
 ❌|https://envoy/ivp/peb/newscan
 ❌|https://envoy/production.json
