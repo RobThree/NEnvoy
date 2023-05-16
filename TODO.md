@@ -17,14 +17,14 @@ Status | Url | Note
 ❌|https://envoy/installer/setup/home
 ❌|https://envoy/inventory?locale=en
 ❌|https://envoy/inventory.json
-❌|https://envoy/inventory.json?deleted=1
+❌|https://envoy/inventory.json?deleted=1 | Can someone provide an example json and point out the difference with `https://envoy/inventory.json` above?
 ❌|https://envoy/ivp/ensemble/inventory
 ❌|https://envoy/ivp/livedata/status
 ✅|https://envoy/ivp/meters
 ✅|https://envoy/ivp/meters/readings
 ❕|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` are still unclear.
 ❌|https://envoy/ivp/peb/newscan
-❌|https://envoy/production.json
+❌|https://envoy/production.json | Won't be implemented, see `https://envoy/production.json?details=1` below
 ❌|https://envoy/production.json?details=1
 ❌|https://envoy/prov
 ❌|https://envoy/stream/meter | SSE
