@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEnvoy", "NEnvoy\NEnvoy.csproj", "{14D4AB85-5697-4EA6-8B40-8A1482BC766C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{0E637C62-ADFE-48C5-92AB-CA1DCA2F640E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14D4AB85-5697-4EA6-8B40-8A1482BC766C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D4AB85-5697-4EA6-8B40-8A1482BC766C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D4AB85-5697-4EA6-8B40-8A1482BC766C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D4AB85-5697-4EA6-8B40-8A1482BC766C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E637C62-ADFE-48C5-92AB-CA1DCA2F640E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E637C62-ADFE-48C5-92AB-CA1DCA2F640E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E637C62-ADFE-48C5-92AB-CA1DCA2F640E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E637C62-ADFE-48C5-92AB-CA1DCA2F640E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74B2329E-F4A1-4B8F-BA1A-CD07EB92C8A1}
+	EndGlobalSection
+EndGlobal
