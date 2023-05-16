@@ -8,7 +8,7 @@ Status | Url | Note
 ✅|https://envoy/info.xml
 ✅|https://envoy/auth/check_jwt
 ❌|https://envoy/admin/home?locale=en
-❌|https://envoy/admin/lib/wireless_display.json?site_info=0
+✅|https://envoy/admin/lib/wireless_display.json?site_info=0
 ✅|https://envoy/api/v1/production
 ❕|https://envoy/api/v1/production/inverters | Throws (401 unauthorized) for some reason
 ❌|https://envoy/event?locale=en

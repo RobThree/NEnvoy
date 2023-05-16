@@ -68,8 +68,11 @@ public class EnvoyClient : IEnvoyClient
     public Task<IEnumerable<Meter>> GetMetersAsync(CancellationToken cancellationToken = default)
         => _envoyclient.GetMetersAsync(cancellationToken);
 
-    public Task<IEnumerable<RootMeterReading>> GetMeterReadingssAsync(CancellationToken cancellationToken = default)
-        => _envoyclient.GetMeterReadingssAsync(cancellationToken);
+    public Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetMeterReadingsAsync(cancellationToken);
+
+    public Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetWirelessDisplayAsync(cancellationToken);
 
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
     private static HttpClient GetUnsafeClient(string baseAddress, string? sessionToken)

@@ -1,4 +1,5 @@
-﻿using NEnvoy.Models;
+﻿using NEnvoy.Internals.Models;
+using NEnvoy.Models;
 using Refit;
 
 namespace NEnvoy.Internals;
@@ -21,5 +22,9 @@ internal interface IEnvoy
     Task<IEnumerable<Meter>> GetMetersAsync(CancellationToken cancellationToken = default);
 
     [Get("/ivp/meters/readings")]
-    Task<IEnumerable<RootMeterReading>> GetMeterReadingssAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default);
+
+    [Get("/admin/lib/wireless_display.json?site_info=0")]
+    Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default);
+
 }
