@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace NEnvoy.Internals.Converters;
-public class IPAddressConverter : JsonConverter<IPAddress?>
+public class IPAddressJsonConverter : JsonConverter<IPAddress?>
 {
     public override IPAddress? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

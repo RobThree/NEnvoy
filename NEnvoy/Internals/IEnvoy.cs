@@ -27,4 +27,9 @@ internal interface IEnvoy
     [Get("/admin/lib/wireless_display.json?site_info=0")]
     Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default);
 
+    [Get("/admin/lib/wireless_display.json?site_info=1")]
+    Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default);
+
+    [Get("/home.json")]
+    Task<Home> GetHome(CancellationToken cancellationToken = default);
 }

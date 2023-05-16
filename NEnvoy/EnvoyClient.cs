@@ -74,6 +74,12 @@ public class EnvoyClient : IEnvoyClient
     public Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default)
         => _envoyclient.GetWirelessDisplayAsync(cancellationToken);
 
+    public Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default)
+        => _envoyclient.GetWirelessDisplayExtendedAsync(cancellationToken);
+
+    public Task<Home> GetHome(CancellationToken cancellationToken = default)
+        => _envoyclient.GetHome(cancellationToken);
+
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
     private static HttpClient GetUnsafeClient(string baseAddress, string? sessionToken)
     {

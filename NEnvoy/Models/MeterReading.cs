@@ -5,7 +5,7 @@ namespace NEnvoy.Models;
 
 public record MeterReading(
     [property: JsonPropertyName("eid")] long EId,                           // TODO: int? long? other?
-    [property: JsonPropertyName("timestamp")][property: JsonConverter(typeof(DateTimeOffsetConverter))] DateTimeOffset Time,
+    [property: JsonPropertyName("timestamp")][property: JsonConverter(typeof(DateTimeOffsetJsonConverter))] DateTimeOffset Time,
     [property: JsonPropertyName("actEnergyDlvd")] decimal ActiveEnergyDelivered,
     [property: JsonPropertyName("actEnergyRcvd")] decimal ActiveEnergyReceived,
     [property: JsonPropertyName("apparentEnergy")] decimal ApparentEnergy,

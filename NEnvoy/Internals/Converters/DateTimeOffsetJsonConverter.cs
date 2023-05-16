@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace NEnvoy.Internals.Converters;
 
-internal class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+internal class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
 {
     public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

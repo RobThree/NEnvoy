@@ -5,7 +5,7 @@ namespace NEnvoy.Models;
 
 public record ConsumptionReport
 (
-    [property: JsonPropertyName("createdAt")][property: JsonConverter(typeof(DateTimeOffsetConverter))] DateTimeOffset CreatedAt,
+    [property: JsonPropertyName("createdAt")][property: JsonConverter(typeof(DateTimeOffsetJsonConverter))] DateTimeOffset CreatedAt,
     [property: JsonPropertyName("reportType")] string ReportType,
     [property: JsonPropertyName("cumulative")] ConsumptionValues Cumulative,
     [property: JsonPropertyName("lines")] ConsumptionValues[] Lines

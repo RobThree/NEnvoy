@@ -4,7 +4,7 @@ If you're aware of other URL's then please let me know; either [make an issue](h
 
 Status | Url | Note
 -|-|-
-❌|https://envoy/home.json
+❕|https://envoy/home.json
 ✅|https://envoy/info.xml
 ✅|https://envoy/auth/check_jwt
 ❌|https://envoy/admin/home?locale=en
@@ -13,9 +13,8 @@ Status | Url | Note
 ❕|https://envoy/api/v1/production/inverters | Throws (401 unauthorized) for some reason
 ❌|https://envoy/event?locale=en
 ❌|https://envoy/event.json
-❌|https://envoy/home
 ❌|https://envoy/installer/setup/home
-❌|https://envoy/inventory?locale=en
+❌|https://envoy/inventory?locale=en | Locale doesn't seem to make a difference (tried `de`, `nl`, `it` and some others)
 ❌|https://envoy/inventory.json
 ❌|https://envoy/inventory.json?deleted=1 | Can someone provide an example json and point out the difference with `https://envoy/inventory.json` above?
 ❌|https://envoy/ivp/ensemble/inventory
