@@ -22,7 +22,7 @@ Status | Url | Note
 ❌|https://envoy/ivp/livedata/status
 ✅|https://envoy/ivp/meters
 ✅|https://envoy/ivp/meters/readings
-❕|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` ar still unclear.
+❕|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` are still unclear.
 ❌|https://envoy/ivp/peb/newscan
 ❌|https://envoy/production.json
 ❌|https://envoy/production.json?details=1
