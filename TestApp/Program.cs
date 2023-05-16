@@ -27,7 +27,7 @@ internal class Program
         //var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
         //var meters = await client.GetMetersAsync().ConfigureAwait(false);
         //var meterreadings = await client.GetMeterReadingssAsync().ConfigureAwait(false);
-        //var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);
+        //var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);        
         //var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
         var home = await client.GetHome().ConfigureAwait(false);
     }
