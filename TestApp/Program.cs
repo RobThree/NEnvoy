@@ -25,10 +25,10 @@ internal class Program
         //var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
         //var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
         //var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
-        //var meters = await client.GetMetersAsync().ConfigureAwait(false);
-        //var meterreadings = await client.GetMeterReadingssAsync().ConfigureAwait(false);
-        //var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);        
-        //var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
-        var home = await client.GetHome().ConfigureAwait(false);
+        // var meters = await client.GetMetersAsync().ConfigureAwait(false);
+        // var meterreadings = await client.GetMeterReadingsAsync().ConfigureAwait(false);
+        // var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);        
+        // var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
+        //var home = await client.GetHome().ConfigureAwait(false);
     }
 }

@@ -7,7 +7,7 @@ namespace NEnvoy.Internals;
 internal interface IEnvoy
 {
     [Get("/info.xml")]
-    Task<EnvoyInfo> GetDeviceInfoAsync(CancellationToken cancellationToken = default);
+    Task<EnvoyInfo> GetEnvoyInfoAsync(CancellationToken cancellationToken = default);
 
     [Get("/ivp/meters/reports/consumption")]
     Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken);
