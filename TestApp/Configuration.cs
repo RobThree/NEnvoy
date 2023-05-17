@@ -6,5 +6,5 @@ namespace TestApp;
 public class Configuration
 {
     public EnvoyConnectionInfo Envoy { get; init; } = new();
-    public EnvoySession? Session { get; init; }
+    public EnvoySession Session { get; init; } = EnvoySession.NullSession;
 }
