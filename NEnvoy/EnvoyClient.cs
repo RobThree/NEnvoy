@@ -24,7 +24,7 @@ public class EnvoyClient : IEnvoyClient
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
 
-    public static EnvoyClient FromSession(string host, SessionInfo sessionInfo)
+    public static EnvoyClient FromSession(SessionInfo sessionInfo, string host = EnvoyConnectionInfo.DefaultHost)
     {
         var baseuri = CreateBaseUri(host);
         var session = EnvoySession.Create(baseuri, sessionInfo);

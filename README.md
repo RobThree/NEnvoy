@@ -15,6 +15,24 @@ var client = await EnvoyClient.FromLoginAsync(ci).ConfigureAwait(false);
 var deviceinfo = await client.GetEnvoyInfoAsync();
 ```
 
+## Session
+
+A login can be slow; once a session has been set up (logged in successfully) you can obtain sessioninfo with the `GetSessionInfo()` method. The information in the returned `SessionInfo` object can then be stored where you want. Next time, the session can be 'resumed' (assuming it hasn't expired) as follows:
+
+```c#
+var client = EnvoyClient.FromSession(new SessionInfo { Token = "eyJ...iJ9", Id = "i9O...p5Q" });
+```
+
+Which, again, assumes host `envoy`; if you need to specify another hostname or IP address you can do so:
+
+```c#
+var session = new SessionInfo { Token = "eyJ...iJ9", Id = "i9O...p5Q" };
+
+var client = EnvoyClient.FromSession(session, "envoy.local");
+// or:
+var client = EnvoyClient.FromSession(session, "192.168.123.45");
+```
+
 ## Connection
 
 You can specify a different hostname or IP address for your Envoy:

@@ -19,7 +19,7 @@ internal class Program
         // If we don't have a session token, we create a client by logging in, else we create one from the session token
         var client = string.IsNullOrEmpty(config.Session?.Token)
             ? await EnvoyClient.FromLoginAsync(config.Envoy).ConfigureAwait(false)
-            : EnvoyClient.FromSession(config.Envoy.EnvoyHost, config.Session);
+            : EnvoyClient.FromSession(config.Session, config.Envoy.EnvoyHost);
 
         // var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         // var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
