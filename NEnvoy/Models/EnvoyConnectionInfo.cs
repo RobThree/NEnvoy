@@ -1,6 +1,6 @@
 ﻿namespace NEnvoy.Models;
 
-public record ConnectionInfo(
+public record EnvoyConnectionInfo(
     string Username = "",
     string Password = "",
     string EnvoyHost = "envoy",
