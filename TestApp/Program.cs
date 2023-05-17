@@ -22,7 +22,7 @@ internal class Program
             : EnvoyClient.FromSession(config.Envoy.EnvoyHost, config.Session);
 
         // var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
-        var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
+        // var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
         // var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
         // var meters = await client.GetMetersAsync().ConfigureAwait(false);
         // var meterreadings = await client.GetMeterReadingsAsync().ConfigureAwait(false);
@@ -30,6 +30,7 @@ internal class Program
         // var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
         // var home = await client.GetHome().ConfigureAwait(false);
 
+        // TODO: This one keeps throwing 401 unauthorized despite we *even* send a sessionid cookie
         // var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
         
     }

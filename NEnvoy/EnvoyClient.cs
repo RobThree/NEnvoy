@@ -3,6 +3,7 @@ using NEnvoy.Internals;
 using NEnvoy.Internals.Models;
 using NEnvoy.Models;
 using Refit;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace NEnvoy;
@@ -89,7 +90,7 @@ public class EnvoyClient : IEnvoyClient
         var client = new HttpClient(new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true,
-            UseCookies = false
+            UseCookies = false  // Yes, false: https://stackoverflow.com/a/13287224/215042
         })
         {
             BaseAddress = new Uri(baseAddress),
@@ -100,7 +101,7 @@ public class EnvoyClient : IEnvoyClient
         }
         if (!string.IsNullOrEmpty(session.Id))
         {
-            //client.DefaultRequestHeaders.Add("Cookie", $"sessionId={session.Id}");
+            client.DefaultRequestHeaders.Add("Cookie", $"sessionid={WebUtility.UrlEncode(session.Id)}");
         }   
 
         return client;
