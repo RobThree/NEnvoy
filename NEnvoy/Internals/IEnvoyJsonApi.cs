@@ -4,13 +4,12 @@ using Refit;
 
 namespace NEnvoy.Internals;
 
-internal interface IEnvoyJsonApi {
-    [Post("/auth/get_jwt")]
-    Task GetJWT();
+internal interface IEnvoyJsonApi
+{
 
     [Post("/auth/check_jwt")]
     Task CheckJWT();
-    
+
     [Get("/ivp/meters/reports/consumption")]
     Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken);
 

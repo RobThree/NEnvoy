@@ -3,8 +3,8 @@ using NEnvoy.Internals;
 using NEnvoy.Internals.Models;
 using NEnvoy.Models;
 using Refit;
-using System.Net.Http.Headers;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace NEnvoy;
 
@@ -28,8 +28,8 @@ public class EnvoyClient : IEnvoyClient
     {
         var baseuri = CreateBaseUri(host);
         var session = EnvoySession.Create(baseuri, sessionInfo);
-        return new(GetEnvoyXmlClient(baseuri), GetEnvoyJsonClient(baseuri, session), session);  
-    } 
+        return new(GetEnvoyXmlClient(baseuri), GetEnvoyJsonClient(baseuri, session), session);
+    }
 
     public static async Task<EnvoyClient> FromLoginAsync(EnvoyConnectionInfo connectionInfo, CancellationToken cancellationToken = default)
     {
@@ -43,7 +43,7 @@ public class EnvoyClient : IEnvoyClient
         {
             var entrezclient = RestService.For<IEntrezEnphase>(connectionInfo.EnphaseEntrezBaseUri);
             var token = await entrezclient.RequestTokenAsync(new EnphaseTokenRequest(loginresult.SessionId, envoyInfo.Device.Serial, connectionInfo.Username), cancellationToken).ConfigureAwait(false);
-            
+
             var session = new EnvoySession(baseAddress, token, loginresult.IsConsumer, new CookieContainer());
             var envoyjsonclient = GetEnvoyJsonClient(baseAddress, session);
 
@@ -58,14 +58,15 @@ public class EnvoyClient : IEnvoyClient
     public SessionInfo GetSessionInfo()
         => _session == null
         ? throw new InvalidOperationException("No current session")
-        : new SessionInfo {
-            Token = _session.Token, 
+        : new SessionInfo
+        {
+            Token = _session.Token,
             Id = _session.Id,
             IsConsumer = _session.IsConsumer
         };
 
     private static Uri CreateBaseUri(string host)
-        => new Uri($"https://{host}");
+        => new($"https://{host}");
 
     private static IEnvoyJsonApi GetEnvoyJsonClient(Uri baseAddress, EnvoySession session)
         => RestService.For<IEnvoyJsonApi>(GetUnsafeClient(baseAddress, session));
@@ -112,7 +113,8 @@ public class EnvoyClient : IEnvoyClient
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true,
         };
-        if (session?.CookieContainer != null) {
+        if (session?.CookieContainer != null)
+        {
             handler.CookieContainer = session.CookieContainer;
             handler.UseCookies = true;
         }
