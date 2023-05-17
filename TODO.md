@@ -13,7 +13,7 @@ Status | Url | Note
 ✅|https://envoy/admin/lib/wireless_display.json?site_info=0
 ❌|https://envoy/admin/lib/tariff
 ✅|https://envoy/api/v1/production
-❕|https://envoy/api/v1/production/inverters | Throws (401 unauthorized) for some reason
+✅|https://envoy/api/v1/production/inverters
 ❌|https://envoy/event.json
 ❌|https://envoy/installer/setup/home
 ❌|https://envoy/inventory?locale=en | Locale doesn't seem to make a difference (tried `de`, `nl`, `it` and some others)
