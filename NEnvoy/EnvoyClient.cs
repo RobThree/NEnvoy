@@ -4,7 +4,7 @@ using NEnvoy.Internals.Models;
 using NEnvoy.Models;
 using Refit;
 using System.Net.Http.Headers;
-using System.Text.Encodings.Web;
+using System.Net;
 
 namespace NEnvoy;
 
@@ -15,22 +15,26 @@ public class EnvoyClient : IEnvoyClient
 
     private readonly IEnvoyXmlApi _envoyxmlclient;
     private readonly IEnvoyJsonApi _envoyjsonclient;
-    
-    public EnvoySession Session { get; private set; }
+    private readonly EnvoySession _session;
 
     private EnvoyClient(IEnvoyXmlApi envoyXmlClient, IEnvoyJsonApi envoyJsonClient, EnvoySession session)
     {
         _envoyxmlclient = envoyXmlClient ?? throw new ArgumentNullException(nameof(envoyXmlClient));
         _envoyjsonclient = envoyJsonClient ?? throw new ArgumentNullException(nameof(envoyJsonClient));
-        Session = session ?? throw new ArgumentNullException(nameof(session));
+        _session = session ?? throw new ArgumentNullException(nameof(session));
     }
 
-    public static EnvoyClient FromSession(string host, EnvoySession session)
-        => new(GetEnvoyXmlClient(host, session), GetEnvoyJsonClient(host, session), session);
+    public static EnvoyClient FromSession(string host, SessionInfo sessionInfo)
+    {
+        var baseuri = CreateBaseUri(host);
+        var session = EnvoySession.Create(baseuri, sessionInfo);
+        return new(GetEnvoyXmlClient(baseuri), GetEnvoyJsonClient(baseuri, session), session);  
+    } 
 
     public static async Task<EnvoyClient> FromLoginAsync(EnvoyConnectionInfo connectionInfo, CancellationToken cancellationToken = default)
     {
-        var envoyxmlclient = GetEnvoyXmlClient(connectionInfo.EnvoyHost, EnvoySession.NullSession);
+        var baseAddress = CreateBaseUri(connectionInfo.EnvoyHost);
+        var envoyxmlclient = GetEnvoyXmlClient(baseAddress);
         var envoyInfo = await GetEnvoyInfoAsync(envoyxmlclient, cancellationToken).ConfigureAwait(false);
 
         var enphaseclient = RestService.For<IEnphase>(connectionInfo.EnphaseBaseUri);
@@ -39,18 +43,35 @@ public class EnvoyClient : IEnvoyClient
         {
             var entrezclient = RestService.For<IEntrezEnphase>(connectionInfo.EnphaseEntrezBaseUri);
             var token = await entrezclient.RequestTokenAsync(new EnphaseTokenRequest(loginresult.SessionId, envoyInfo.Device.Serial, connectionInfo.Username), cancellationToken).ConfigureAwait(false);
-            var session = new EnvoySession(token, loginresult.SessionId, loginresult.IsConsumer);
-            var envoyjsonclient = GetEnvoyJsonClient(connectionInfo.EnvoyHost, session);
+            
+            var session = new EnvoySession(baseAddress, token, loginresult.IsConsumer, new CookieContainer());
+            var envoyjsonclient = GetEnvoyJsonClient(baseAddress, session);
+
+            // Get our sessionid
+            await envoyjsonclient.CheckJWT().ConfigureAwait(false);
+
             return new EnvoyClient(envoyxmlclient, envoyjsonclient, session);
         }
         throw new LoginFailedException(loginresult.Message);
     }
 
-    private static IEnvoyJsonApi GetEnvoyJsonClient(string host, EnvoySession session)
-        => RestService.For<IEnvoyJsonApi>(GetUnsafeClient($"https://{host}", session));
+    public SessionInfo GetSessionInfo()
+        => _session == null
+        ? throw new InvalidOperationException("No current session")
+        : new SessionInfo {
+            Token = _session.Token, 
+            Id = _session.Id,
+            IsConsumer = _session.IsConsumer
+        };
 
-    private static IEnvoyXmlApi GetEnvoyXmlClient(string host, EnvoySession session)
-        => RestService.For<IEnvoyXmlApi>(GetUnsafeClient($"https://{host}", session), new RefitSettings
+    private static Uri CreateBaseUri(string host)
+        => new Uri($"https://{host}");
+
+    private static IEnvoyJsonApi GetEnvoyJsonClient(Uri baseAddress, EnvoySession session)
+        => RestService.For<IEnvoyJsonApi>(GetUnsafeClient(baseAddress, session));
+
+    private static IEnvoyXmlApi GetEnvoyXmlClient(Uri baseAddress)
+        => RestService.For<IEnvoyXmlApi>(GetUnsafeClient(baseAddress), new RefitSettings
         {
             ContentSerializer = new XmlContentSerializer()
         });
@@ -85,24 +106,24 @@ public class EnvoyClient : IEnvoyClient
         => _envoyjsonclient.GetHome(cancellationToken);
 
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
-    private static HttpClient GetUnsafeClient(string baseAddress, EnvoySession session)
+    private static HttpClient GetUnsafeClient(Uri baseAddress, EnvoySession? session = null)
     {
-        var client = new HttpClient(new HttpClientHandler
+        var handler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true,
-            UseCookies = false  // Yes, false: https://stackoverflow.com/a/13287224/215042
-        })
-        {
-            BaseAddress = new Uri(baseAddress),
         };
-        if (!string.IsNullOrEmpty(session.Token))
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session.Token);
+        if (session?.CookieContainer != null) {
+            handler.CookieContainer = session.CookieContainer;
+            handler.UseCookies = true;
         }
-        if (!string.IsNullOrEmpty(session.Id))
+        var client = new HttpClient(handler)
         {
-            client.DefaultRequestHeaders.Add("Cookie", $"sessionid={UrlEncoder.Default.Encode(session.Id)}");
-        }   
+            BaseAddress = baseAddress
+        };
+        if (!string.IsNullOrEmpty(session?.Token))
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session?.Token);
+        }
 
         return client;
     }
