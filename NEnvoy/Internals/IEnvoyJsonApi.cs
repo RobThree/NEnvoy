@@ -1,5 +1,4 @@
-﻿using NEnvoy.Internals.Models;
-using NEnvoy.Models;
+﻿using NEnvoy.Models;
 using Refit;
 
 namespace NEnvoy.Internals;
@@ -33,6 +32,9 @@ internal interface IEnvoyJsonApi
 
     [Get("/production.json?details=1")]
     Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default);
+
+    [Get("/inventory.json")]
+    Task<IEnumerable<InventoryItem>> GetInventoryAsync(CancellationToken cancellationToken = default);
 
     [Get("/home.json")]
     Task<Home> GetHomeAsync(CancellationToken cancellationToken = default);

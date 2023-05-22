@@ -111,6 +111,9 @@ public class EnvoyClient : IEnvoyClient
     public Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetProductionAsync(cancellationToken);
 
+    public Task<IEnumerable<InventoryItem>> GetInventoryAsync(CancellationToken cancellationToken = default)
+        => _envoyjsonclient.GetInventoryAsync(cancellationToken);
+
     public Task<Home> GetHomeAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetHomeAsync(cancellationToken);
 

@@ -12,5 +12,6 @@ public interface IEnvoyClient
     Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default);
     Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default);
     Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<InventoryItem>> GetInventoryAsync(CancellationToken cancellationToken = default);
     Task<Home> GetHomeAsync(CancellationToken cancellationToken = default);
 }

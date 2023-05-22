@@ -10,5 +10,5 @@ namespace NEnvoy.Models;
 public abstract record ProductionRecord
 (
     [property: JsonPropertyName("activeCount")] int ActiveCount,
-    [property: JsonPropertyName("readingTime")][property: JsonConverter(typeof(TimestampDateTimeOffsetJsonConverter))] DateTimeOffset ReadingTime
+    [property: JsonPropertyName("readingTime")][property: JsonConverter(typeof(IntTimestampDateTimeOffsetJsonConverter))] DateTimeOffset ReadingTime
 );

@@ -5,7 +5,7 @@ namespace NEnvoy.Models;
 
 public record Home
 (
-    [property: JsonPropertyName("software_build_epoch")][property: JsonConverter(typeof(TimestampDateTimeOffsetJsonConverter))] DateTimeOffset SoftwareBuildEpoch,
+    [property: JsonPropertyName("software_build_epoch")][property: JsonConverter(typeof(IntTimestampDateTimeOffsetJsonConverter))] DateTimeOffset SoftwareBuildEpoch,
     [property: JsonPropertyName("is_nonvoy")] bool IsNonVoy,
     [property: JsonPropertyName("db_size")] int DbSize,    //TODO: Maybe long?
     [property: JsonPropertyName("db_percent_full")][property: JsonConverter(typeof(StringDecimalJsonConverter))] decimal? DbPercentFull,

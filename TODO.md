@@ -17,7 +17,7 @@ Status | Url | Note
 ❌|https://envoy/event.json
 ❌|https://envoy/installer/setup/home
 ❌|https://envoy/inventory?locale=en | Locale doesn't seem to make a difference (tried `de`, `nl`, `it` and some others)
-❌|https://envoy/inventory.json
+✅|https://envoy/inventory.json
 ❌|https://envoy/inventory.json?deleted=1 | Can someone provide an example json and point out the difference with `https://envoy/inventory.json` above?
 ❌|https://envoy/ivp/adc/record?eid=1090519312
 ❌|https://envoy/ivp/adc/record?eid=1090519312&tpm=true
