@@ -35,6 +35,6 @@ internal class Program
         // var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
         // var home = await client.GetHomeAsync().ConfigureAwait(false);
         // var production = await client.GetProductionAsync().ConfigureAwait(false);
-        var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
+        // var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
     }
 }

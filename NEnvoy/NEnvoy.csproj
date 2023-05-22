@@ -19,7 +19,7 @@
 		<PackageTags>api-client;envoy;enphase-api;enphase;envoy-api</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Devcorner.nl</Copyright>
-		<Version>0.2.2-alpha</Version>
+		<Version>0.2.3-alpha</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
