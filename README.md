@@ -8,7 +8,11 @@ Currently a work in progress. The list of currently implemented (and not yet imp
 
 ```c#
 // Create client and login (assumes "envoy" hostname)
-var ci = new ConnectionInfo("user@gmail.com", "sup3rs3cet");
+var ci = new EnvoyConnectionInfo
+	{
+		Username = "user@gmail.com",
+		Password = "sup3rs3cet",
+	};
 var client = await EnvoyClient.FromLoginAsync(ci).ConfigureAwait(false);
 
 // Get information from Envoy
