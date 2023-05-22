@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7</TargetFrameworks>
+		<TargetFramework>net7</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
@@ -19,7 +19,7 @@
 		<PackageTags>api-client;envoy;enphase-api;enphase;envoy-api</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Devcorner.nl</Copyright>
-		<Version>0.2.0-alpha</Version>
+		<Version>0.2.1-alpha</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
