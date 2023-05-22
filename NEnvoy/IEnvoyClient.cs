@@ -1,5 +1,4 @@
-﻿using NEnvoy.Internals.Models;
-using NEnvoy.Models;
+﻿using NEnvoy.Models;
 
 namespace NEnvoy;
 public interface IEnvoyClient

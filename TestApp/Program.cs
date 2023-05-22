@@ -16,12 +16,16 @@ internal class Program
         var config = new Configuration();
         configprovider.Bind(config);
 
-        // If we don't have a session token, we create a client by logging in, else we create one from the session token
-        var client = string.IsNullOrEmpty(config.Session?.Token)
-            ? await EnvoyClient.FromLoginAsync(config.Envoy).ConfigureAwait(false)
-            : EnvoyClient.FromSession(config.Session, config.Envoy.EnvoyHost);
+        var sessionfile = "session.json";
 
-        // var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
+        // If we don't have a session token, we create a client by logging in, else we create one from the session token
+        var client = File.Exists(sessionfile)
+            ? EnvoyClient.FromSession(await EnvoyClient.LoadSessionAsync(sessionfile).ConfigureAwait(false), config.Envoy.EnvoyHost)
+            : await EnvoyClient.FromLoginAsync(config.Envoy).ConfigureAwait(false);
+
+        await client.SaveSessionAsync(sessionfile).ConfigureAwait(false);
+
+        //var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         // var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
         // var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
         // var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);

@@ -5,6 +5,7 @@ using NEnvoy.Models;
 using Refit;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace NEnvoy;
 
@@ -12,6 +13,10 @@ public class EnvoyClient : IEnvoyClient
 {
     public const string DefaultEnphaseBaseUri = "https://enlighten.enphaseenergy.com";
     public const string DefaultEntrezBaseUri = "https://entrez.enphaseenergy.com";
+    private static readonly JsonSerializerOptions _defaultjsonserializeroptions = new()
+    {
+        WriteIndented = true,
+    };
 
     private readonly IEnvoyXmlApi _envoyxmlclient;
     private readonly IEnvoyJsonApi _envoyjsonclient;
@@ -108,6 +113,31 @@ public class EnvoyClient : IEnvoyClient
 
     public Task<Home> GetHomeAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetHomeAsync(cancellationToken);
+
+    // Save current instance session
+    public Task SaveSessionAsync(string path, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+        => SaveSessionAsync(path, GetSessionInfo(), jsonSerializerOptions, cancellationToken);
+    public Task SaveSessionAsync(Stream stream, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+        => SaveSessionAsync(stream, GetSessionInfo(), jsonSerializerOptions, cancellationToken);
+
+    // Save given session
+    public static async Task SaveSessionAsync(string path, SessionInfo sessionInfo, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        using var fs = File.Create(path);
+        await SaveSessionAsync(fs, sessionInfo, jsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+    }
+    public static Task SaveSessionAsync(Stream stream, SessionInfo sessionInfo, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+        => JsonSerializer.SerializeAsync(stream, sessionInfo, jsonSerializerOptions ?? _defaultjsonserializeroptions, cancellationToken);
+
+    // Load session
+    public static async Task<SessionInfo> LoadSessionAsync(string path, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        using var fs = File.OpenRead(path);
+        return await LoadSessionAsync(fs, jsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+    }
+    public static async Task<SessionInfo> LoadSessionAsync(Stream stream, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
+        => await JsonSerializer.DeserializeAsync<SessionInfo>(stream, jsonSerializerOptions ?? _defaultjsonserializeroptions, cancellationToken).ConfigureAwait(false)
+        ?? throw new InvalidOperationException("Unable to deserialize session"); //TODO: Decent exception
 
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
     private static HttpClient GetUnsafeClient(Uri baseAddress, EnvoySession? session = null)

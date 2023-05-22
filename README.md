@@ -33,6 +33,8 @@ var client = EnvoyClient.FromSession(session, "envoy.local");
 var client = EnvoyClient.FromSession(session, "192.168.123.45");
 ```
 
+Sessions can be stored in your `appsettings.json`, `secrets.json` or wherever you want. We provide a few conveniencemethods that save and load sessions from/to a file or stream. 
+
 ### Connection
 
 You can specify a different hostname or IP address for your Envoy:
