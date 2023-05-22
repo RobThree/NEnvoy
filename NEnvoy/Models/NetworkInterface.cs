@@ -10,9 +10,8 @@ namespace NEnvoy.Models;
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EthernetInterface), typeDiscriminator: "ethernet")]
 //[JsonDerivedType(typeof(WiFiInterface), typeDiscriminator: "wifi")]
-//public record NetworkInterface
+//public abstract record NetworkInterface
 //(
-//    [property: JsonPropertyName("type")] string Type,
 //    [property: JsonPropertyName("interface")] string Interface,
 //    [property: JsonPropertyName("mac")] string MacAddress,
 //    [property: JsonPropertyName("dhcp")] bool DHCP,
