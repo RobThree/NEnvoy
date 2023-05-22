@@ -20,20 +20,33 @@ var deviceinfo = await client.GetEnvoyInfoAsync();
 A login can be slow; once a session has been set up (logged in successfully) you can obtain sessioninfo with the `GetSessionInfo()` method. The information in the returned `SessionInfo` object can then be stored where you want. Next time, the session can be 'resumed' (assuming it hasn't expired) as follows:
 
 ```c#
-var client = EnvoyClient.FromSession(new SessionInfo { Token = "eyJ...iJ9", Id = "i9O...p5Q" });
-```
-
-Which, again, assumes host `envoy`; if you need to specify another hostname or IP address you can do so:
-
-```c#
 var session = new SessionInfo { Token = "eyJ...iJ9", Id = "i9O...p5Q" };
-
+var client = EnvoyClient.FromSession(session);
+// or, if you don't want to use the default "envoy" hostname:
 var client = EnvoyClient.FromSession(session, "envoy.local");
 // or:
 var client = EnvoyClient.FromSession(session, "192.168.123.45");
 ```
 
-Sessions can be stored in your `appsettings.json`, `secrets.json` or wherever you want. We provide a few conveniencemethods that save and load sessions from/to a file or stream. 
+Sessions can be stored in your `appsettings.json`, `secrets.json` or wherever you want. We provide a few conveniencemethods that save and load sessions to and from a file or stream:
+
+```c#
+Static methods on EnvoyClient:
+
+// Save to and load from file:
+Task SaveSessionAsync(path, sessionInfo, jsonSerializerOptions, cancellationToken);
+Task<SessionInfo> LoadSessionAsync(path, jsonSerializerOptions, cancellationToken);
+
+// Save to and load from stream:
+Task SaveSessionAsync(stream, sessionInfo, jsonSerializerOptions, cancellationToken);
+Task<SessionInfo> LoadSessionAsync(stream, jsonSerializerOptions, cancellationToken);
+
+// Instance methods on EnvoyClient:
+Task SaveSessionAsync(path, jsonSerializerOptions, cancellationToken);
+Task SaveSessionAsync(stream, jsonSerializerOptions, cancellationToken);
+```
+
+If you'd rather store session information in another way, you can get the session info by calling `GetSessionInfo()`.
 
 ### Connection
 
