@@ -1,4 +1,4 @@
-﻿namespace NEnvoy.Internals.Models;
+﻿namespace NEnvoy.Models;
 
 public record WirelessDisplayExtended(
   bool Supported,

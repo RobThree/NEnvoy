@@ -12,5 +12,6 @@ public interface IEnvoyClient
     Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default);
     Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default);
     Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default);
-    Task<Home> GetHome(CancellationToken cancellationToken = default);
+    Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default);
+    Task<Home> GetHomeAsync(CancellationToken cancellationToken = default);
 }

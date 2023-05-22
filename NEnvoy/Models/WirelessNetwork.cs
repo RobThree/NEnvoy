@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json.Serialization;
 
-namespace NEnvoy.Internals.Models;
+namespace NEnvoy.Models;
 
 public record WirelessNetwork(
   [property: JsonPropertyName("ssid")] string SSId,

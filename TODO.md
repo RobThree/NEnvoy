@@ -34,7 +34,7 @@ Status | Url | Note
 ❌|https://envoy/ivp/livedata/status/counters
 ✅|https://envoy/ivp/meters
 ✅|https://envoy/ivp/meters/readings
-❕|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` are still unclear.
+✅|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` are still unclear.
 ❌|https://envoy/ivp/peb/newscan
 ❌|https://envoy/ivp/sc/status
 ❌|https://envoy/ivp/sc/pvlimit
@@ -49,8 +49,7 @@ Status | Url | Note
 ❌|https://envoy/ivp/zb/commission
 ❌|https://envoy/ivp/zb/pairing_status
 ❌|https://envoy/ivp/grest/profile/acti
-❌|https://envoy/production.json | Won't be implemented, see `https://envoy/production.json?details=1` below
-❌|https://envoy/production.json?details=1
+✅|https://envoy/production.json?details=1
 ❌|https://envoy/prov
 ❌|https://envoy/stream/meter | SSE
 

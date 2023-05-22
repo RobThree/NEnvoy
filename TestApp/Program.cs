@@ -29,6 +29,7 @@ internal class Program
         // var meterreadings = await client.GetMeterReadingsAsync().ConfigureAwait(false);
         // var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);        
         // var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
-        // var home = await client.GetHome().ConfigureAwait(false);
+        var home = await client.GetHomeAsync().ConfigureAwait(false);
+        // var production = await client.GetProductionAsync().ConfigureAwait(false);
     }
 }

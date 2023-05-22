@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NEnvoy.Internals.Models;
+namespace NEnvoy.Models;
 
 public record WirelessDisplay(
   [property: JsonPropertyName("supported")] bool Supported,

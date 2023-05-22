@@ -31,6 +31,9 @@ internal interface IEnvoyJsonApi
     [Get("/admin/lib/wireless_display.json?site_info=1")]
     Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default);
 
+    [Get("/production.json?details=1")]
+    Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default);
+
     [Get("/home.json")]
-    Task<Home> GetHome(CancellationToken cancellationToken = default);
+    Task<Home> GetHomeAsync(CancellationToken cancellationToken = default);
 }

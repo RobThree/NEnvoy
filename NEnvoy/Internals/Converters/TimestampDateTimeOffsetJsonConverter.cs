@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace NEnvoy.Internals.Converters;
 
-internal class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
+internal class TimestampDateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
 {
     public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -12,7 +12,7 @@ internal class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
             return DateTimeOffset.FromUnixTimeSeconds(value);
         }
 
-        throw new InvalidDataException();   // TODO: Decent exception
+        throw new FormatException();   // TODO: Decent exception
     }
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
