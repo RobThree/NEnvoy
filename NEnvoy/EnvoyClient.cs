@@ -102,6 +102,26 @@ public class EnvoyClient : IEnvoyClient
     public Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetMeterReadingsAsync(cancellationToken);
 
+    public async Task<DeviceStatus> GetDeviceStatusAsync(CancellationToken cancellationToken = default)
+    {
+        // Try to make the Envoy mess a little more bearable
+        var result = await _envoyjsonclient.GetDeviceStatusAsync(cancellationToken).ConfigureAwait(false);
+        return new DeviceStatus(
+            new DeviceStatusCounters(
+                result.Counters.TryGetValue("pcu", out var pcu) ? pcu.ToDeviceStatusCounter() : null,
+                result.Counters.TryGetValue("acb", out var acb) ? acb.ToDeviceStatusCounter() : null,
+                result.Counters.TryGetValue("nsrb", out var nsrb) ? nsrb.ToDeviceStatusCounter() : null,
+                result.Counters.TryGetValue("pld", out var pld) ? pld.ToDeviceStatusCounter() : null,
+                result.Counters.TryGetValue("esub", out var esub) ? esub.ToDeviceStatusCounter() : null
+            ),
+            result.PCU?.ToDeviceStatusValues(),
+            result.ACB?.ToDeviceStatusValues(),
+            result.NSRB?.ToDeviceStatusValues(),
+            result.PLD?.ToDeviceStatusValues(),
+            result.ESUB?.ToDeviceStatusValues()
+        );
+    }
+
     public Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetWirelessDisplayAsync(cancellationToken);
 

@@ -36,6 +36,7 @@ Status | Url | Note
 ✅|https://envoy/ivp/meters/readings
 ✅|https://envoy/ivp/meters/reports/consumption | Some properties on `ConsumptionValues` are still unclear.
 ❌|https://envoy/ivp/peb/newscan
+✅|https://envoy/ivp/peb/devstatus
 ❌|https://envoy/ivp/sc/status
 ❌|https://envoy/ivp/sc/pvlimit
 ❌|https://envoy/ivp/ss/pcs_settings
