@@ -9,7 +9,7 @@ public interface IEnvoyClient
     Task<V1Production> GetV1ProductionAsync(CancellationToken cancellationToken);
     Task<IEnumerable<Meter>> GetMetersAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default);
-    Task<DeviceStatus> GetDeviceStatusAsync(CancellationToken cancellationToken = default);
+    Task<DeviceStatus> GetDeviceStatusAsync(IEqualityComparer<string>? equalityComparer = null, CancellationToken cancellationToken = default);
     Task<WirelessDisplay> GetWirelessDisplayAsync(CancellationToken cancellationToken = default);
     Task<WirelessDisplayExtended> GetWirelessDisplayExtendedAsync(CancellationToken cancellationToken = default);
     Task<ProductionData> GetProductionAsync(CancellationToken cancellationToken = default);

@@ -102,7 +102,7 @@ public class EnvoyClient : IEnvoyClient
     public Task<IEnumerable<RootMeterReading>> GetMeterReadingsAsync(CancellationToken cancellationToken = default)
         => _envoyjsonclient.GetMeterReadingsAsync(cancellationToken);
 
-    public async Task<DeviceStatus> GetDeviceStatusAsync(CancellationToken cancellationToken = default)
+    public async Task<DeviceStatus> GetDeviceStatusAsync(IEqualityComparer<string>? equalityComparer = null, CancellationToken cancellationToken = default)
     {
         // Try to make the Envoy mess a little more bearable
         var result = await _envoyjsonclient.GetDeviceStatusAsync(cancellationToken).ConfigureAwait(false);
@@ -114,11 +114,11 @@ public class EnvoyClient : IEnvoyClient
                 result.Counters.TryGetValue("pld", out var pld) ? pld.ToDeviceStatusCounter() : null,
                 result.Counters.TryGetValue("esub", out var esub) ? esub.ToDeviceStatusCounter() : null
             ),
-            result.PCU?.ToDeviceStatusValues(),
-            result.ACB?.ToDeviceStatusValues(),
-            result.NSRB?.ToDeviceStatusValues(),
-            result.PLD?.ToDeviceStatusValues(),
-            result.ESUB?.ToDeviceStatusValues()
+            result.PCU?.ToDeviceStatusValues(equalityComparer),
+            result.ACB?.ToDeviceStatusValues(equalityComparer),
+            result.NSRB?.ToDeviceStatusValues(equalityComparer),
+            result.PLD?.ToDeviceStatusValues(equalityComparer),
+            result.ESUB?.ToDeviceStatusValues(equalityComparer)
         );
     }
 

@@ -37,16 +37,17 @@ internal class Program
         // var production = await client.GetProductionAsync().ConfigureAwait(false);
         // var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
 
-        //var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
-        //var inverterdata = devicestatus.PCU?.Where(v => v.Value["devType"].GetValue<int>() == 1)
-        //    .ToDictionary(v => v.Key, v => new
-        //    {
-        //        Temp = v.Value["temperature"].GetValue<int>(),
-        //        ReportDate = DateTimeOffset.FromUnixTimeSeconds(v.Value["reportDate"].GetValue<int>()).ToLocalTime(),
-        //        DcVoltageIn = v.Value["dcVoltageINmV"].GetValue<int>() / 1000m,
-        //        DcCurrentIn = v.Value["dcCurrentINmA"].GetValue<int>() / 1000m,
-        //        AcVoltageIn = v.Value["acVoltageINmV"].GetValue<int>() / 1000m,
-        //        AcCurrentIn = v.Value["acPowerINmW"].GetValue<int>() / 1000m
-        //    });
+        var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
+        var inverterdata = devicestatus.PCU?
+            .Where(v => v.Value["devType"].GetValue<int>() == 1)
+            .ToDictionary(v => v.Key, v => new
+            {
+                Temp = v.Value["temperature"].GetValue<int>(),
+                ReportDate = DateTimeOffset.FromUnixTimeSeconds(v.Value["reportDate"].GetValue<int>()).ToLocalTime(),
+                DcVoltageIn = v.Value["dcVoltageINmV"].GetValue<int>() / 1000m,
+                DcCurrentIn = v.Value["dcCurrentINmA"].GetValue<int>() / 1000m,
+                AcVoltageIn = v.Value["acVoltageINmV"].GetValue<int>() / 1000m,
+                AcCurrentIn = v.Value["acPowerINmW"].GetValue<int>() / 1000m
+            });
     }
 }
