@@ -47,7 +47,10 @@ internal class Program
         //        DcVoltageIn = v.Value["dcVoltageINmV"].GetValue<int>() / 1000m,
         //        DcCurrentIn = v.Value["dcCurrentINmA"].GetValue<int>() / 1000m,
         //        AcVoltageIn = v.Value["acVoltageINmV"].GetValue<int>() / 1000m,
-        //        AcCurrentIn = v.Value["acPowerINmW"].GetValue<int>() / 1000m
+        //        AcPowerIn = v.Value["acPowerINmW"].GetValue<int>() / 1000m,
+        //        Communicating = v.Value["communicating"].GetValue<bool>(),
+        //        Recent = v.Value["recent"].GetValue<bool>(),
+        //        Producing = v.Value["producing"].GetValue<bool>()
         //    });
     }
 }
