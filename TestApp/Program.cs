@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using NEnvoy;
-
-namespace TestApp;
+﻿namespace TestApp;
 
 internal class Program
 {
