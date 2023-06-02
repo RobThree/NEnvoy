@@ -7,17 +7,14 @@ namespace NEnvoy.Internals;
 internal interface IEnvoyJsonApi
 {
 
-    [Post("/auth/check_jwt")]
-    Task CheckJWT();
-
     [Get("/ivp/meters/reports/consumption")]
-    Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken = default);
 
     [Get("/api/v1/production")]
-    Task<V1Production> GetV1ProductionAsync(CancellationToken cancellationToken);
+    Task<V1Production> GetV1ProductionAsync(CancellationToken cancellationToken = default);
 
     [Get("/api/v1/production/inverters")]
-    Task<IEnumerable<V1Inverter>> GetV1InvertersAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<V1Inverter>> GetV1InvertersAsync(CancellationToken cancellationToken = default);
 
     [Get("/ivp/meters")]
     Task<IEnumerable<Meter>> GetMetersAsync(CancellationToken cancellationToken = default);

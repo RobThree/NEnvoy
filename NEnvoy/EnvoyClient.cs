@@ -4,7 +4,6 @@ using NEnvoy.Internals.Models;
 using NEnvoy.Models;
 using Refit;
 using System.Net.Http.Headers;
-using System.Text.Json;
 
 namespace NEnvoy;
 
@@ -12,10 +11,6 @@ public class EnvoyClient : IEnvoyClient
 {
     public const string DefaultEnphaseBaseUri = "https://enlighten.enphaseenergy.com";
     public const string DefaultEntrezBaseUri = "https://entrez.enphaseenergy.com";
-    private static readonly JsonSerializerOptions _defaultjsonserializeroptions = new()
-    {
-        WriteIndented = true,
-    };
 
     private readonly IEnvoyXmlApi _envoyxmlclient;
     private readonly IEnvoyJsonApi _envoyjsonclient;
@@ -30,12 +25,11 @@ public class EnvoyClient : IEnvoyClient
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
 
-    public static async Task<EnvoyClient> FromTokenAsync(string token, string host = EnvoyConnectionInfo.DefaultHost)
+    public static EnvoyClient FromToken(string token, EnvoyConnectionInfo connectionInfo)
     {
-        var baseuri = CreateBaseUri(host);
-        var session = EnvoySession.Create(baseuri, token);
+        var baseuri = CreateBaseUri(connectionInfo.EnvoyHost);
+        var session = EnvoySession.Create(baseuri, connectionInfo.SessionTimeout, token);
         var envoyjsonclient = GetEnvoyJsonClient(baseuri, session);
-        await RenewSession(envoyjsonclient).ConfigureAwait(false);
         return new(GetEnvoyXmlClient(baseuri), envoyjsonclient, session);
     }
 
@@ -52,22 +46,13 @@ public class EnvoyClient : IEnvoyClient
             var entrezclient = RestService.For<IEntrezEnphase>(connectionInfo.EnphaseEntrezBaseUri);
             var token = await entrezclient.RequestTokenAsync(new EnphaseTokenRequest(loginresult.SessionId, envoyInfo.Device.Serial, connectionInfo.Username), cancellationToken).ConfigureAwait(false);
 
-            var session = EnvoySession.Create(baseAddress, token);
+            var session = EnvoySession.Create(baseAddress, connectionInfo.SessionTimeout, token);
             var envoyjsonclient = GetEnvoyJsonClient(baseAddress, session);
-
-            // Get our sessionid
-            await envoyjsonclient.CheckJWT().ConfigureAwait(false);
 
             return new EnvoyClient(envoyxmlclient, envoyjsonclient, session);
         }
         throw new LoginFailedException(loginresult.Message);
     }
-
-    private static Task RenewSession(IEnvoyJsonApi envoyjsonclient)
-        => envoyjsonclient.CheckJWT();
-
-    public Task RenewSession()
-        => RenewSession(_envoyjsonclient);
 
     private static Uri CreateBaseUri(string host)
         => new($"https://{host}");
@@ -139,7 +124,7 @@ public class EnvoyClient : IEnvoyClient
     // Returns an HttpClient that ignores SSL errors since Envoy uses self-signed certificates
     private static HttpClient GetUnsafeClient(Uri baseAddress, EnvoySession? session = null)
     {
-        var handler = new HttpClientHandler
+        var handler = new EnvoyHttpClientHandler(session)
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true,
         };
@@ -152,11 +137,29 @@ public class EnvoyClient : IEnvoyClient
         {
             BaseAddress = baseAddress
         };
-        if (!string.IsNullOrEmpty(session?.Token))
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session?.Token);
-        }
-
         return client;
+    }
+
+    private class EnvoyHttpClientHandler : HttpClientHandler
+    {
+        private readonly EnvoySession? _session;
+
+        public EnvoyHttpClientHandler(EnvoySession? session)
+            => _session = session;
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            if (_session != null)
+            {
+                if (_session.Expired)
+                {
+                    var authrequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_session.BaseAddress, "/auth/check_jwt"));
+                    authrequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _session.Token);
+                    (await base.SendAsync(authrequest, cancellationToken).ConfigureAwait(false)).EnsureSuccessStatusCode();
+                }
+                _session.UpdateLastRequest();
+            }
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

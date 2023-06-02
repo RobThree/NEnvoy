@@ -19,7 +19,7 @@ internal class Program
 
         var client = await GetClientAsync(config.Envoy, "token.txt").ConfigureAwait(false);
 
-        var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
+        //var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         //var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
         //var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
         //var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
@@ -48,15 +48,15 @@ internal class Program
         //    });
     }
 
-    private static async Task<IEnvoyClient> GetClientAsync(EnvoyConnectionInfo envoyConnectionInfo, string tokenfile)
+    private static async Task<IEnvoyClient> GetClientAsync(EnvoyConnectionInfo envoyConnectionInfo, string tokenfile, CancellationToken cancellationToken = default)
     {
         // If we don't have a session token, we create a client by logging in, else we create one from the session token
         if (!File.Exists(tokenfile))
         {
-            var client = await EnvoyClient.FromLoginAsync(envoyConnectionInfo).ConfigureAwait(false);
-            await File.WriteAllTextAsync(tokenfile, client.GetToken()).ConfigureAwait(false);
+            var client = await EnvoyClient.FromLoginAsync(envoyConnectionInfo, cancellationToken).ConfigureAwait(false);
+            await File.WriteAllTextAsync(tokenfile, client.GetToken(), cancellationToken).ConfigureAwait(false);
             return client;
         }
-        return await EnvoyClient.FromTokenAsync(await File.ReadAllTextAsync(tokenfile).ConfigureAwait(false), envoyConnectionInfo.EnvoyHost).ConfigureAwait(false);
+        return EnvoyClient.FromToken(await File.ReadAllTextAsync(tokenfile, cancellationToken).ConfigureAwait(false), envoyConnectionInfo);
     }
 }

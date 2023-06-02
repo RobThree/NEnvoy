@@ -1,36 +1,21 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 internal record EnvoySession(
     Uri BaseAddress,
     string Token,
+    TimeSpan SessionTimeout,
     CookieContainer CookieContainer
 )
 {
-    private const string _cookie_sessionid = "sessionId";
-    public string Id => TryGetCookieValue(_cookie_sessionid, out var value) ? value : string.Empty;
+    private DateTimeOffset _lastrequest = DateTimeOffset.MinValue;
 
-    internal static EnvoySession Create(Uri baseAddress, string token)
+    public bool Expired => DateTimeOffset.UtcNow - _lastrequest > SessionTimeout;
+
+    public static EnvoySession Create(Uri baseAddress, TimeSpan sessionTimeout, string token)
     {
         var c = new CookieContainer();
-        return new EnvoySession(baseAddress, token, c);
+        return new EnvoySession(baseAddress, token, sessionTimeout, c);
     }
 
-    private bool TryGetCookie(string name, [NotNullWhen(true)] out Cookie? cookie)
-    {
-        var cookies = CookieContainer.GetCookies(BaseAddress).Cast<Cookie>();
-        cookie = cookies.FirstOrDefault(c => c.Name == name);
-        return cookie != null;
-    }
-
-    private bool TryGetCookieValue(string name, [NotNullWhen(true)] out string? value)
-    {
-        value = null;
-        if (TryGetCookie(name, out var cookie))
-        {
-            value = cookie.Value;
-            return true;
-        }
-        return false;
-    }
+    public void UpdateLastRequest() => _lastrequest = DateTimeOffset.UtcNow;
 }
