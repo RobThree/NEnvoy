@@ -19,19 +19,19 @@ internal class Program
 
         var client = await GetClientAsync(config.Envoy, "token.txt").ConfigureAwait(false);
 
-        //var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
+        var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         //var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
         //var v1production = await client.GetV1ProductionAsync().ConfigureAwait(false);
         //var v1inverters = await client.GetV1InvertersAsync().ConfigureAwait(false);
         //var meters = await client.GetMetersAsync().ConfigureAwait(false);
         //var meterreadings = await client.GetMeterReadingsAsync().ConfigureAwait(false);
-        //var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);        
+        //var wireless = await client.GetWirelessDisplayAsync().ConfigureAwait(false);
         //var wirelessext = await client.GetWirelessDisplayExtendedAsync().ConfigureAwait(false);
         //var home = await client.GetHomeAsync().ConfigureAwait(false);
         //var production = await client.GetProductionAsync().ConfigureAwait(false);
         //var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
 
-        var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
+        //var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
         //var inverterdata = devicestatus.PCU?
         //    .Where(v => v.Value["devType"].GetValue<int>() == 1)
         //    .ToDictionary(v => v.Key, v => new
