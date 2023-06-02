@@ -1,4 +1,8 @@
-﻿namespace TestApp;
+﻿using Microsoft.Extensions.Configuration;
+using NEnvoy;
+using NEnvoy.Models;
+
+namespace TestApp;
 
 internal class Program
 {
@@ -13,14 +17,7 @@ internal class Program
         var config = new Configuration();
         configprovider.Bind(config);
 
-        var sessionfile = "session.json";
-
-        // If we don't have a session token, we create a client by logging in, else we create one from the session token
-        var client = File.Exists(sessionfile)
-            ? EnvoyClient.FromSession(await EnvoyClient.LoadSessionAsync(sessionfile).ConfigureAwait(false), config.Envoy.EnvoyHost)
-            : await EnvoyClient.FromLoginAsync(config.Envoy).ConfigureAwait(false);
-
-        await client.SaveSessionAsync(sessionfile).ConfigureAwait(false);
+        var client = await GetClientAsync(config.Envoy, "token.txt").ConfigureAwait(false);
 
         //var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         //var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
@@ -34,7 +31,7 @@ internal class Program
         //var production = await client.GetProductionAsync().ConfigureAwait(false);
         //var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
 
-        //var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
+        var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
         //var inverterdata = devicestatus.PCU?
         //    .Where(v => v.Value["devType"].GetValue<int>() == 1)
         //    .ToDictionary(v => v.Key, v => new
@@ -49,5 +46,17 @@ internal class Program
         //        Recent = v.Value["recent"].GetValue<bool>(),
         //        Producing = v.Value["producing"].GetValue<bool>()
         //    });
+    }
+
+    private static async Task<IEnvoyClient> GetClientAsync(EnvoyConnectionInfo envoyConnectionInfo, string tokenfile)
+    {
+        // If we don't have a session token, we create a client by logging in, else we create one from the session token
+        if (!File.Exists(tokenfile))
+        {
+            var client = await EnvoyClient.FromLoginAsync(envoyConnectionInfo).ConfigureAwait(false);
+            await File.WriteAllTextAsync(tokenfile, client.GetToken()).ConfigureAwait(false);
+            return client;
+        }
+        return await EnvoyClient.FromTokenAsync(await File.ReadAllTextAsync(tokenfile).ConfigureAwait(false), envoyConnectionInfo.EnvoyHost).ConfigureAwait(false);
     }
 }

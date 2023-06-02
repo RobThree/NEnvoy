@@ -1,22 +1,19 @@
-using NEnvoy.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 internal record EnvoySession(
     Uri BaseAddress,
     string Token,
-    bool IsConsumer,
     CookieContainer CookieContainer
 )
 {
     private const string _cookie_sessionid = "sessionId";
     public string Id => TryGetCookieValue(_cookie_sessionid, out var value) ? value : string.Empty;
 
-    internal static EnvoySession Create(Uri baseAddress, SessionInfo sessionInfo)
+    internal static EnvoySession Create(Uri baseAddress, string token)
     {
         var c = new CookieContainer();
-        c.Add(baseAddress, new Cookie(_cookie_sessionid, sessionInfo.Id));
-        return new EnvoySession(baseAddress, sessionInfo.Token, sessionInfo.IsConsumer, c);
+        return new EnvoySession(baseAddress, token, c);
     }
 
     private bool TryGetCookie(string name, [NotNullWhen(true)] out Cookie? cookie)
