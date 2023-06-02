@@ -21,7 +21,7 @@ var deviceinfo = await client.GetEnvoyInfoAsync();
 
 ### Sessions
 
-A login is slow; once a session has been set up (logged in successfully) you can obtain the token and ave it for later use:
+A login is slow; once a session has been set up (logged in successfully) you can obtain the token and save it for later use:
 
 ```c#
 var token = client.GetToken();
