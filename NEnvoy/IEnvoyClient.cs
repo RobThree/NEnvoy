@@ -3,6 +3,7 @@
 namespace NEnvoy;
 public interface IEnvoyClient
 {
+    string GetToken();
     Task<EnvoyInfo> GetEnvoyInfoAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<V1Inverter>> GetV1InvertersAsync(CancellationToken cancellationToken = default);
