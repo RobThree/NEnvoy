@@ -57,11 +57,10 @@ public class EnvoyClient : IEnvoyClient
         throw new LoginFailedException(loginresult.Message);
     }
 
-    public static async Task<EnvoyClient> FromUILoginAsync(EnvoyConnectionInfo connectionInfo, string deviceSerial, CancellationToken cancellationToken = default)
+    public static async Task<EnvoyClient> FromUILoginAsync(EnvoyConnectionInfo connectionInfo, CancellationToken cancellationToken = default)
     {
-        var baseAddress = CreateBaseUri(connectionInfo.EnvoyHost);
         string GenerateRandomString(int length) {
-            var chars = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+            var chars = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return string.Join(
                 string.Empty, 
                 Enumerable.Range(0,length).Select(c => chars[Random.Shared.Next(chars.Length)])
@@ -74,8 +73,13 @@ public class EnvoyClient : IEnvoyClient
             .Replace("+", "-")
             .Replace("/", "_")
             .Replace("=", string.Empty);
-        
-        var secret = GenerateRandomString(43);
+
+        var baseAddress = CreateBaseUri(connectionInfo.EnvoyHost);
+        var envoyxmlclient = GetEnvoyXmlClient(baseAddress);
+        var envoyInfo = await GetEnvoyInfoAsync(envoyxmlclient, cancellationToken).ConfigureAwait(false);
+
+
+        var secret = GenerateRandomString(40);
         var entrezclient = GetEntrezEnphaseJsonClient(new Uri(connectionInfo.EnphaseEntrezBaseUri));
 
         var callbackuri = $"{CreateBaseUri(connectionInfo.EnvoyHost)}auth/callback";
@@ -88,7 +92,7 @@ public class EnvoyClient : IEnvoyClient
             "envoy-ui",
             "envoy-ui-client",
             "oauth",
-            deviceSerial,
+            envoyInfo.Device.Serial,
             "authorize",
             string.Empty,
             string.Empty

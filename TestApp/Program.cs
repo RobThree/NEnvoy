@@ -31,7 +31,7 @@ internal class Program
         // var production = await client.GetProductionAsync().ConfigureAwait(false);
         // var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
 
-        var client = await EnvoyClient.FromUILoginAsync(config.Envoy, "<SERIALHERE>").ConfigureAwait(false);
+        var client = await EnvoyClient.FromUILoginAsync(config.Envoy).ConfigureAwait(false);
         var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
         // var inverterdata = devicestatus.PCU?
         //    .Where(v => v.Value["devType"].GetValue<int>() == 1)
