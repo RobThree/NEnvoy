@@ -6,6 +6,8 @@ namespace NEnvoy.Internals;
 
 internal interface IEnvoyJsonApi
 {
+    [Post("/auth/get_jwt")]
+    Task<JWTResponse> GetJWT(JWTRequest jwtRequest, CancellationToken cancellationToken = default);
 
     [Get("/ivp/meters/reports/consumption")]
     Task<IEnumerable<ConsumptionReport>> GetConsumptionAsync(CancellationToken cancellationToken = default);

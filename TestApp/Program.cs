@@ -17,7 +17,7 @@ internal class Program
         var config = new Configuration();
         configprovider.Bind(config);
 
-        var client = await GetClientAsync(config.Envoy, "token.txt").ConfigureAwait(false);
+        // var client = await GetClientAsync(config.Envoy, "token.txt").ConfigureAwait(false);
 
         // var deviceinfo = await client.GetEnvoyInfoAsync().ConfigureAwait(false);
         // var consumption = await client.GetConsumptionAsync().ConfigureAwait(false);
@@ -31,7 +31,8 @@ internal class Program
         // var production = await client.GetProductionAsync().ConfigureAwait(false);
         // var inventory = await client.GetInventoryAsync().ConfigureAwait(false);
 
-        // var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
+        var client = await EnvoyClient.FromUILoginAsync(config.Envoy, "<SERIALHERE>").ConfigureAwait(false);
+        var devicestatus = await client.GetDeviceStatusAsync().ConfigureAwait(false);
         // var inverterdata = devicestatus.PCU?
         //    .Where(v => v.Value["devType"].GetValue<int>() == 1)
         //    .ToDictionary(v => v.Key, v => new

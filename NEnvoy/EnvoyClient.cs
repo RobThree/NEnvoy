@@ -4,6 +4,9 @@ using NEnvoy.Internals.Models;
 using NEnvoy.Models;
 using Refit;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
 
 namespace NEnvoy;
 
@@ -44,7 +47,7 @@ public class EnvoyClient : IEnvoyClient
         if (string.Equals(loginresult.Message, "success", StringComparison.OrdinalIgnoreCase))
         {
             var entrezclient = RestService.For<IEntrezEnphase>(connectionInfo.EnphaseEntrezBaseUri);
-            var token = await entrezclient.RequestTokenAsync(new EnphaseTokenRequest(loginresult.SessionId, envoyInfo.Device.Serial, connectionInfo.Username), cancellationToken).ConfigureAwait(false);
+            var token = await entrezclient.RequestTokenAsync(new EntrezEnphaseTokenRequest(loginresult.SessionId, envoyInfo.Device.Serial, connectionInfo.Username), cancellationToken).ConfigureAwait(false);
 
             var session = EnvoySession.Create(baseAddress, connectionInfo.SessionTimeout, token);
             var envoyjsonclient = GetEnvoyJsonClient(baseAddress, session);
@@ -54,10 +57,78 @@ public class EnvoyClient : IEnvoyClient
         throw new LoginFailedException(loginresult.Message);
     }
 
+    public static async Task<EnvoyClient> FromUILoginAsync(EnvoyConnectionInfo connectionInfo, string deviceSerial, CancellationToken cancellationToken = default)
+    {
+        var baseAddress = CreateBaseUri(connectionInfo.EnvoyHost);
+        string GenerateRandomString(int length) {
+            var chars = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+            return string.Join(
+                string.Empty, 
+                Enumerable.Range(0,length).Select(c => chars[Random.Shared.Next(chars.Length)])
+            );
+        }
+        string GenerateChallenge(string value)
+            => Convert.ToBase64String(
+                SHA256.HashData(Encoding.UTF8.GetBytes(value))
+            )
+            .Replace("+", "-")
+            .Replace("/", "_")
+            .Replace("=", string.Empty);
+        
+        var secret = GenerateRandomString(43);
+        var entrezclient = GetEntrezEnphaseJsonClient(new Uri(connectionInfo.EnphaseEntrezBaseUri));
+
+        var callbackuri = $"{CreateBaseUri(connectionInfo.EnvoyHost)}auth/callback";
+
+        var result = await entrezclient.LoginAsync(new EntrezEnphaseLoginRequest(
+            connectionInfo.Username,
+            connectionInfo.Password,
+            GenerateChallenge(secret),
+            callbackuri,
+            "envoy-ui",
+            "envoy-ui-client",
+            "oauth",
+            deviceSerial,
+            "authorize",
+            string.Empty,
+            string.Empty
+        ), cancellationToken).ConfigureAwait(false);
+
+        var querystring = HttpUtility.ParseQueryString(result.Headers.Location?.Query ?? string.Empty);
+        var code = querystring.Get("code");
+        
+        if (string.IsNullOrEmpty(code))
+            throw new Exception("Unable to parse code from return URI");  //TODO: Decent exception
+
+        var client = GetEnvoyJsonClient(baseAddress);
+        var jwtresult = await client.GetJWT(
+            new JWTRequest(
+                "envoy-ui-1",
+                "authorization_code",
+                callbackuri,
+                secret,
+                code
+            ),
+            cancellationToken
+        ).ConfigureAwait(false);
+
+        var session = EnvoySession.Create(baseAddress, connectionInfo.SessionTimeout, jwtresult.AccessToken);
+        session.UpdateLastRequest();
+        var envoyjsonclient = GetEnvoyJsonClient(baseAddress, session);
+        return new EnvoyClient(
+            GetEnvoyXmlClient(baseAddress),
+            envoyjsonclient, 
+            session
+        );
+    }
+
     private static Uri CreateBaseUri(string host)
         => new($"https://{host}");
 
-    private static IEnvoyJsonApi GetEnvoyJsonClient(Uri baseAddress, EnvoySession session)
+    private static IEntrezEnphase GetEntrezEnphaseJsonClient(Uri baseAddress)
+        => RestService.For<IEntrezEnphase>(GetSafeClient(baseAddress));
+
+    private static IEnvoyJsonApi GetEnvoyJsonClient(Uri baseAddress, EnvoySession? session = null)
         => RestService.For<IEnvoyJsonApi>(GetUnsafeClient(baseAddress, session));
 
     private static IEnvoyXmlApi GetEnvoyXmlClient(Uri baseAddress)
@@ -140,6 +211,14 @@ public class EnvoyClient : IEnvoyClient
         return client;
     }
 
+    private static HttpClient GetSafeClient(Uri baseAddress)
+        => new HttpClient(new EnvoyHttpClientHandler(null) {
+            AllowAutoRedirect = false
+        })
+        {
+            BaseAddress = baseAddress
+        };
+
     private class EnvoyHttpClientHandler : HttpClientHandler
     {
         private readonly EnvoySession? _session;
@@ -158,6 +237,8 @@ public class EnvoyClient : IEnvoyClient
                     (await base.SendAsync(authrequest, cancellationToken).ConfigureAwait(false)).EnsureSuccessStatusCode();
                 }
                 _session.UpdateLastRequest();
+
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _session.Token);
             }
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
