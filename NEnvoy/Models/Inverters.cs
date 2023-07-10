@@ -2,7 +2,7 @@
 
 namespace NEnvoy.Models;
 
-public record Inverters(
+public record Inverter(
     int ActiveCount,
     DateTimeOffset ReadingTime,
     [property: JsonPropertyName("wNow")] decimal WattsNow,
