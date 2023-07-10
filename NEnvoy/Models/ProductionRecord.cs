@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace NEnvoy.Models;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Inverter), typeDiscriminator: "inverters")]
+[JsonDerivedType(typeof(Inverters), typeDiscriminator: "inverters")]
 [JsonDerivedType(typeof(EIM), typeDiscriminator: "eim")]
 [JsonDerivedType(typeof(Battery), typeDiscriminator: "acb")]
 public abstract record ProductionRecord
