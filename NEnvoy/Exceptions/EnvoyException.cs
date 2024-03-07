@@ -1,6 +1,4 @@
 ﻿namespace NEnvoy.Exceptions;
-public class EnvoyException : Exception
+public class EnvoyException(string message, Exception? innerException = null) : Exception(message, innerException)
 {
-    public EnvoyException(string message, Exception? innerException = null)
-        : base(message, innerException) { }
 }

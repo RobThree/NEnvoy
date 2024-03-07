@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
@@ -18,8 +18,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>api-client;envoy;enphase-api;enphase;envoy-api</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Copyright>Copyright © 2023 Devcorner.nl</Copyright>
-		<Version>0.3.1-alpha</Version>
+		<Copyright>Copyright © 2023 - 2024 Devcorner.nl</Copyright>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
@@ -31,11 +30,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PolySharp" Version="1.13.2">
+		<PackageReference Include="PolySharp" Version="1.14.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Refit.Xml" Version="6.3.2" />
+		<PackageReference Include="Refit.Xml" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,9 +1,6 @@
 ﻿namespace NEnvoy.Exceptions;
 
-public class LoginFailedException : EnvoyException
+public class LoginFailedException(string? responseMessage) : EnvoyException("Login failed")
 {
-    public string? ResponseMessage { get; init; }
-
-    public LoginFailedException(string? responseMessage)
-        : base("Login failed") => ResponseMessage = responseMessage;
+    public string? ResponseMessage { get; init; } = responseMessage;
 }

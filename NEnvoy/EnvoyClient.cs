@@ -140,12 +140,9 @@ public class EnvoyClient : IEnvoyClient
         return client;
     }
 
-    private class EnvoyHttpClientHandler : HttpClientHandler
+    private class EnvoyHttpClientHandler(EnvoySession? session) : HttpClientHandler
     {
-        private readonly EnvoySession? _session;
-
-        public EnvoyHttpClientHandler(EnvoySession? session)
-            => _session = session;
+        private readonly EnvoySession? _session = session;
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
