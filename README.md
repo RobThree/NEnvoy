@@ -1,4 +1,7 @@
-# ![Logo](logo.png) NEnvoy
+# ![Logo](https://raw.githubusercontent.com/RobThree/NEnvoy/master/logo.png) NEnvoy
+
+![Build Status](https://img.shields.io/github/actions/workflow/status/RobThree/NEnvoy/test.yml?branch=master&style=flat-square) [![Nuget version](https://img.shields.io/nuget/v/NEnvoy.svg?style=flat-square)](https://www.nuget.org/packages/NEnvoy/)
+
 
 A .Net Enphase Envoy client available as a [NuGet package](https://www.nuget.org/packages/NEnvoy).
 
